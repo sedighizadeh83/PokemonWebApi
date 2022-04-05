@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
@@ -29,7 +30,10 @@ namespace PokemonWebApi.Services
         public async Task<string> CallApiEndPoint(Uri requestUri)
         {
             var response = await _httpClient.GetAsync(requestUri);
-            response.EnsureSuccessStatusCode();
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpRequestException(response.Content.ToString(), inner: null, response.StatusCode);
+            }
 
             var content = await response.Content.ReadAsStringAsync();
 

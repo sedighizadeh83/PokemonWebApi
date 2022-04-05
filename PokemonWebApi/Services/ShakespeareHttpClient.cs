@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
@@ -35,7 +36,10 @@ namespace PokemonWebApi.Services
             };
             
             var response = await _httpClient.PostAsJsonAsync(requestUri, data);
-            response.EnsureSuccessStatusCode();
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpRequestException(response.Content.ToString(), inner: null, response.StatusCode);
+            }
 
             var responseContent = await response.Content.ReadAsStringAsync();
 

@@ -21,7 +21,7 @@ namespace PokemonWebApi.Controllers
         }
 
         [HttpGet("{name}")]
-        public async Task<ActionResult> GetPokemonByName(string name)
+        public async Task<ActionResult> GetPokemonDescriptionByName(string name)
         {
             var pokemonModel = await _pokemonHttpClient.GetPokemon(name);
 
